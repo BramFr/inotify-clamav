@@ -1,9 +1,10 @@
 # inotify-clamav
 
 Simple python script
-That will watch a folder. When the event "IN_CREATE" comes up clamdscan will scan this file and automatic remove them.
+That will watch a folder. When the event "IN_CREATE, IN_MODIFY or IN_ATTRIB" comes up clamdscan will scan this file and automatic remove them.
 
-change the var: `watch_folder`
+change the var: `watch_folder`. 
+Default events are enabled inotify_event = ('IN_CREATE', 'IN_MODIFY', 'IN_ATTRIB')
 
 ## Systemd-service
 ```
