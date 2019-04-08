@@ -3,7 +3,7 @@ from subprocess import run
 from threading import Thread
 import inotify.adapters
 
-watch_folder = '/home/bram/Downloads'
+watch_folder = '/path/to/folder'
 
 def _worker(file_path):
     '''
