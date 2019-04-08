@@ -1,8 +1,9 @@
-import inotify.adapters
+#!/usr/bin/env python3
 from subprocess import run
 from threading import Thread
+import inotify.adapters
 
-watch_folder = '/path/to/folder'
+watch_folder = '/home/bram/Downloads'
 
 def _worker(file_path):
     '''
