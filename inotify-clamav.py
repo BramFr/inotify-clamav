@@ -33,7 +33,10 @@ def _worker(file_path):
     run_command = ['/usr/bin/clamdscan', '--fdpass', '--remove=yes', file_path]
     run(run_command)
 
-def mythreads(filename): 
+def mythreads(filename):
+    '''
+    Looking for a existing thread with the same name.
+    '''
     for x in threading.enumerate():
         if x.name == filename:
             return True
