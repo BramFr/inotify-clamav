@@ -6,6 +6,11 @@ That will watch a folder. When the event "IN_CREATE, IN_MODIFY or IN_ATTRIB" com
 change the var: `watch_folder`. 
 Default events are enabled inotify_event = ('IN_CREATE', 'IN_MODIFY', 'IN_ATTRIB')
 
+## Install requirements
+```
+pip3 install -r requirements.txt
+```
+
 ## Systemd-service
 ```
 [Unit]
