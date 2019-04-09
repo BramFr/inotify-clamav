@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from subprocess import run
-from threading import Thread
+import threading
 import inotify.adapters
 
 watch_folder = '/path/to/folder'
@@ -28,11 +28,16 @@ IN_OPEN            File was opened (*)
 
 def _worker(file_path):
     '''
-    This function start clamdscan with a new thread. Five the path of the folder.
+    This function start clamdscan with a new thread. Give the path of the folder.
     '''
     run_command = ['/usr/bin/clamdscan', '--fdpass', '--remove=yes', file_path]
     run(run_command)
 
+def mythreads(filename): 
+    for x in threading.enumerate():
+        if x.name == filename:
+            return True
+    return False
 
 def _main():
     try:
@@ -45,8 +50,8 @@ def _main():
             if event[1][0] in inotify_event:
                 (header, type_names, watch_path, filename) = event
                 file_path = watch_path + '/' + filename
-                Thread(target=_worker, args=({file_path})).start()
-                print(f'{file_path}')
+                if not mythreads(filename):
+                    threading.Thread(target=_worker, name=filename, args=({file_path})).start()
 
 
 if __name__ == '__main__':
