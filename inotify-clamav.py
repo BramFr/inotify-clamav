@@ -3,8 +3,8 @@ from subprocess import run
 import threading
 import inotify.adapters
 
-watch_folder = '/path/to/folder'
-inotify_event = ('IN_CREATE', 'IN_MODIFY', 'IN_ATTRIB')
+WATCH_FOLDER = ['/path/to/folder']
+INOTIFY_EVENTS = ('IN_CREATE', 'IN_MODIFY', 'IN_ATTRIB')
 '''
 EVENT SYMBOLS
 
@@ -33,28 +33,32 @@ def _worker(file_path):
     run_command = ['/usr/bin/clamdscan', '--fdpass', '--remove=yes', file_path]
     run(run_command)
 
-def mythreads(filename):
+
+def _mythreads(filename):
     '''
     Looking for a existing thread with the same name.
     '''
-    for x in threading.enumerate():
-        if x.name == filename:
+    for thread in threading.enumerate():
+        if thread.name == filename:
             return True
     return False
 
+
 def _main():
     try:
-        i = inotify.adapters.InotifyTree(watch_folder)
+        i = inotify.adapters.InotifyTrees(WATCH_FOLDER)
     except PermissionError:
         print(f'Please start script with enough permissons')
 
     for event in i.event_gen():
         if event is not None:
-            if event[1][0] in inotify_event:
+            if event[1][0] in INOTIFY_EVENTS:
                 (header, type_names, watch_path, filename) = event
                 file_path = watch_path + '/' + filename
-                if not mythreads(filename):
-                    threading.Thread(target=_worker, name=filename, args=({file_path})).start()
+                if not _mythreads(filename):
+                    threading.Thread(
+                        target=_worker, name=filename,
+                        args=({file_path})).start()
 
 
 if __name__ == '__main__':
