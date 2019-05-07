@@ -50,16 +50,16 @@ def _main():
     except PermissionError:
         print(f'Please start script with enough permissons')
 
-
     for event in i.event_gen():
         if event is not None:
             if event[1][0] in INOTIFY_EVENTS:
-                (header, type_names, watch_path, filename) = event
+                (_, _, watch_path, filename) = event
                 file_path = watch_path + '/' + filename
                 if not _mythreads(filename):
                     threading.Thread(
                         target=_worker, name=filename,
                         args=({file_path})).start()
+
 
 if __name__ == '__main__':
     _main()
